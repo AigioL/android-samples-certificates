@@ -120,6 +120,13 @@ static class CertificateHelper
         //{
         var builder = new Pkcs12StoreBuilder();
         builder.SetUseDerEncoding(true);
+#if NET6_0_OR_GREATER
+        if (OperatingSystem.IsAndroid())
+        {
+            // https://github.com/dotnet/runtime/issues/71603
+            builder.SetCertAlgorithm(PkcsObjectIdentifiers.PbeWithShaAnd3KeyTripleDesCbc);
+        }
+#endif
         store = builder.Build();
         //}
         //else
